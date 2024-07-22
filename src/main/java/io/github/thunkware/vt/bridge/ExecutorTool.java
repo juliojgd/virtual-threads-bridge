@@ -47,6 +47,7 @@ public class ExecutorTool {
      * that creates virtual threads.
      *
      * @return a new executor that creates a new virtual Thread for each task
+     * @since 0.0.5
      */
     public static ExecutorService newVirtualThreadPerTaskExecutor() {
         return getThreadProvider().newVirtualThreadPerTaskExecutor();
@@ -57,11 +58,25 @@ public class ExecutorTool {
      *
      * @param permits number of sempahore permits
      * @return a new executor with limited concurrency
+     * @deprecated Because of a typo in the name of the method
      */
+    @Deprecated(forRemoval = true, since = "0.0.5")
     public static ExecutorService newSempahoreVirtualExecutor(int permits) {
         ExecutorService executor = getThreadProvider().newVirtualThreadPerTaskExecutor();
-        return new SempahoreExecutor(executor, permits);
+        return new SemaphoreExecutor(executor, permits);
     }
+
+    /**
+     * Creates an Executor that starts a new virtual Thread and limits concurrency to the number of sempahore permits
+     *
+     * @param permits number of semaphore permits
+     * @return a new executor with limited concurrency
+     */
+    public static ExecutorService newSemaphoreVirtualExecutor(int permits) {
+        ExecutorService executor = getThreadProvider().newVirtualThreadPerTaskExecutor();
+        return new SemaphoreExecutor(executor, permits);
+    }
+
 
     private ExecutorTool() {
         throw new AssertionError();
